@@ -23,10 +23,6 @@ require('./bootstrap');
 
 
 
-
-
-
-
 if (document.querySelector('#terminal')) {
 
     ReactDOM.render(

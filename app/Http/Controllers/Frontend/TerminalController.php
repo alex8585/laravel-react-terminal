@@ -18,8 +18,11 @@ class TerminalController extends Controller
 
     public function index()
     {
+       return view('terminal.index', []);
+    }
+
+    public function getBookOrder() {
         $orders = OrderBook::get()->toArray();
-       // dd($orders);
-       return view('terminal.index', ['orders' => $orders]);
+        return response()->json($orders);
     }
 }

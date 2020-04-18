@@ -10,10 +10,10 @@ import orderbookStore from './orderbook';
 
 class RootStore {
     constructor() {
-        /* this.api = {
- 
-         };
-         this.orderbook = new orderbookStore(this);*/
+        this.api = {
+
+        };
+        this.orderBook = new orderbookStore(this);
     }
 }
 
