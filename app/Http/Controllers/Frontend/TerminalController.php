@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\OrderBook as OrderBook;
+use \Carbon\Carbon as Carbon;
+
+
 
 class TerminalController extends Controller
 {
@@ -14,7 +18,8 @@ class TerminalController extends Controller
 
     public function index()
     {
-        dd('1111');
-       // return view('welcome');
+        $orders = OrderBook::get()->toArray();
+       // dd($orders);
+       return view('terminal.index', ['orders' => $orders]);
     }
 }
