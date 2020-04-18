@@ -16,8 +16,9 @@ use Illuminate\Http\Request;
 
 
 Route::namespace('Frontend')->group(function () {
-
+    
     Route::get('/', 'TerminalController@index');
+    Route::get('/getbook', 'TerminalController@getBookOrder');
    /* Route::get('/currencies', 'CurrencyController@currencies')->name('front_currencies');
 
     Route::get('/currencies/{currency}', 'CurrencyController@show')->name('front_currency_show');

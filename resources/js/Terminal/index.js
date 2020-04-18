@@ -17,6 +17,6 @@ class Terminal extends React.Component {
     }
 }
 
-export default withStore(Terminal);
+export default Terminal;
 
 
