@@ -21,9 +21,9 @@
         "babel-preset-mobx": "^2.0.0",
         "bootstrap": "^4.4.1",
         "cross-env": "^7.0",
-        "jquery": "^3.2",
+        "jquery": "^3.5.1",
         "laravel-mix": "^5.0.1",
-        "lodash": "^4.17.13",
+        "lodash": "^4.17.19",
         "popper.js": "^1.12",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
@@ -32,11 +32,13 @@
         "sass-loader": "^8.0.0"
     },
     "dependencies": {
-        "mobx": "^5.10.1",
-        "mobx-react": "^6.1.1",
         "prop-types": "^15.7.2",
         "react-bootstrap": "^1.0.0-beta.9",
+        "react-redux": "^7.2.0",
         "react-router-dom": "^5.0.1",
-        "react-transition-group": "^4.2.1"
+        "react-transition-group": "^4.2.1",
+        "redux": "^4.0.5",
+        "redux-saga": "^1.1.3",
+        "redux-thunk": "^2.3.0"
     }
 }

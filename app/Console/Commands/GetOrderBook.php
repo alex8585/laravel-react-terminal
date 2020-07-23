@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+
 use Illuminate\Console\Command;
 use App\OrderBook as OrderBook;
 use \Carbon\Carbon as Carbon;
+use BinanceRequest;
 
 class GetOrderBook extends Command
 {
@@ -13,7 +15,7 @@ class GetOrderBook extends Command
      *
      * @var string
      */
-    protected $signature = 'order_book';
+    protected $signature = 'get_order_book';
 
     /**
      * The console command description.
@@ -30,6 +32,7 @@ class GetOrderBook extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->binRequest = new BinanceRequest();
     }
 
     /**
@@ -37,27 +40,15 @@ class GetOrderBook extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle() 
     { 
-        $apiUrl = config('settings.api_urls.binance');
-        $baseUrl = $apiUrl . 'v3/depth';
 
         $params = [
             'symbol'=> 'ETHUSDT',
             'limit' => 5
         ];
 
-        $qs = http_build_query($params); 
-        $url = "{$baseUrl}?{$qs}";
-        
-
-        $client = new \GuzzleHttp\Client(['http_errors' => false]);
-        $res = $client->request('GET', $url);
-        $response =  json_decode($res->getBody());
-       
-
-        //print_r($response);
-
+        $response = $this->binRequest->get('depth', $params);
         
         OrderBook::where([
             'exchanger' => 'binance',
