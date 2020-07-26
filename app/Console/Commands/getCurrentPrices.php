@@ -3,18 +3,17 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Statistic as Statistic;
-use \Carbon\Carbon as Carbon;
-use BinanceRequest;
 
-class GetStatistics extends Command
+use \Carbon\Carbon as Carbon;
+use App\Price as Price;
+class getCurrentPrices extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'get_statistics';
+    protected $signature = 'get_price';
 
     /**
      * The console command description.
@@ -31,7 +30,7 @@ class GetStatistics extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->binRequest = new BinanceRequest();
+        $this->binRequest = new \BinanceRequest();
     }
 
     /**
@@ -41,21 +40,21 @@ class GetStatistics extends Command
      */
     public function handle()
     {
-        $response = $this->binRequest->get('ticker/24hr');
         $sumbols =  config('settings.sumbols');
+        $now = Carbon::now();
 
-
-        foreach($response as $stat) {
-            if(in_array($stat->symbol,$sumbols) !== false ) {
-                $statObj = Statistic::updateOrCreate(
-                    ['symbol' => $stat->symbol],
-                    [
-                        'symbol' => $stat->symbol,
-                        'data' =>  json_encode($stat),
-                    ]
-                );
+        $prices = [];
+        $response = $this->binRequest->get('ticker/price');
+        foreach ($response as $price) {
+            if(in_array($price->symbol,$sumbols) !== false ) {
+                $newPriceElem = (array)$price;
+                $newPriceElem['created_at'] = $now;
+                $newPriceElem['updated_at'] = $now;
+                $prices[] = $newPriceElem;
             }
-            
         }
+        //dd($prices);
+        Price::insert($prices);
+
     }
 }

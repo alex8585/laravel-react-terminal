@@ -1,0 +1,13 @@
+
+.table.statistics {
+    font-size: 12px;
+}
+.red-price {
+    font-weight: bold;
+    color:red;
+}
+
+.green-price {
+    font-weight: bold;
+    color:green;
+}

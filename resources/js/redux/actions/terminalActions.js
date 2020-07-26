@@ -1,30 +1,7 @@
-import * as types from './types';
-
-
-export function fetchBook() {
-    return {
-        type: types.REQUEST_BOOK
-    }
-
-}
-
-
-export function showLoader() {
-    return {
-        type:types.SHOW_LOADER
-    }
-}
-
-export function hideLoader() {
-    return {
-        type:types.HIDE_LOADER
-    }
-}
-
-
-
+import * as types from '../types';
 export function showAlert(text) {
     return dispatch => {
+        console.log(types.SHOW_ALERT);
         dispatch({
             type:types.SHOW_ALERT,
             payload:text

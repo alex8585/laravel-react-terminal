@@ -2,10 +2,10 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import Terminal from './components/Terminal/index.js';
 import {compose, createStore, applyMiddleware} from 'redux';
-import {rootReducer} from './redux/rootReducer';
+import {rootReducer} from './redux/reducers/rootReducer';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
-import {forbiddenWordsMiddleware} from './redux/middleware';
+import {forbiddenWordsMiddleware} from './redux/middlewares/middleware';
 import createSagaMiddleware from 'redux-saga';
 import {sagaWatcher} from './redux/sagas';
 
@@ -15,7 +15,7 @@ const saga = createSagaMiddleware();
 const store = createStore(
     rootReducer,
     compose(
-        applyMiddleware(thunk,forbiddenWordsMiddleware, saga),
+        applyMiddleware(thunk, saga),
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     )
 );

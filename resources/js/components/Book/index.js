@@ -2,19 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './index.css';
 import BookRow from '../BookRow';
-import {fetchBook} from '../../redux/actions';
+import {fetchBook} from '../../redux/actions/bookActions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react';
 
 export default () => {
     const dispatch = useDispatch();
-    const loading = useSelector(state => state.app.loading);
+    const loading = useSelector(state => state.book.loading);
     const book = useSelector(state => state.book.bookArr);
 
     useEffect(() => {
         dispatch(fetchBook());
-        console.log('useEffect1');
-        
+        console.log('useEffect BOOK');
+        const interval = setInterval(() => {
+            dispatch(fetchBook());
+            console.log('useEffect BOOK');
+        }, 60000);
+        return () => clearInterval(interval);
+
     },[]); 
     
     
@@ -38,11 +43,6 @@ export default () => {
     asks = asks.map(row => <BookRow row={row} key={row.id}></BookRow>);
    
     
-
-   
-    
-   
-
 
     return (
         <div className='order-book'>
