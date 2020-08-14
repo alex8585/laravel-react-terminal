@@ -1,9 +1,12 @@
 import * as types from '../types';
 
 
-export function fetchSymbols() {
+
+
+export function fetchSymbols(oldSymbolsArr) {
     return {
-        type: types.REQUEST_SYMBOLS
+        type: types.REQUEST_SYMBOLS,
+        oldSymbolsArr:oldSymbolsArr
     }
 
 }

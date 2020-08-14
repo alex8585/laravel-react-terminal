@@ -1,4 +1,5 @@
 import * as types from '../types';
+
 export function showAlert(text) {
     return dispatch => {
         console.log(types.SHOW_ALERT);
@@ -17,5 +18,12 @@ export function showAlert(text) {
 export function hideAlert() {
     return {
         type:types.HIDE_ALERT
+    }
+}
+
+export function setCurrentSymbol(symbol) {
+    return {
+        type: types.SET_SYMBOL,
+        payload:symbol
     }
 }

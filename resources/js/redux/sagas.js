@@ -14,11 +14,35 @@ export function* sagaWatcher() {
 
 function*  sagaGetSymbols(params) {
     try {
+        
         yield put(showSymbolsLoader());
         const response = yield axios.get('/getsymbols');
+        
+        let oldSymbolsArr =  params.oldSymbolsArr;
+        //console.log(oldSymbolsArr);
+        let newSymbolsArr = response.data;
+            if(oldSymbolsArr.length) {
+                 newSymbolsArr = response.data.map((elem,index)=>{
+                    let newElemSumblol = elem.symbol;
+                    let oldElem = oldSymbolsArr.find(function(oldElem, index) {
+                        if(oldElem.symbol == newElemSumblol)
+                            return true;
+                    });
+                    elem.direction = 'none';
+                    if(oldElem.price > elem.price) {
+                        elem.direction = 'raise';
+                    }else if(oldElem.price < elem.price) {
+                        elem.direction = 'decline';
+                    }else if(oldElem.price == elem.price) {
+                        elem.direction = oldElem.direction;
+                    }
+                    return elem;
+                })
+            }
+
         yield put({
             type: types.FETCH_SYMBOLS,
-            payload:response.data
+            payload:newSymbolsArr
         })
         yield put(hideSymbolsLoader());
     } catch(e) {
@@ -48,10 +72,13 @@ function* sagaGetStatistics(params) {
 }
 
 
-function* sagaGetbook () {
+function* sagaGetbook (params) {
     try {
+        let sumbol = params.payload;
         yield put(showBookLoader());
-        const response = yield axios.get('/getbook');
+        const response = yield axios.get('/getbook',{
+            params: {sumbol} 
+        });
         yield put({
             type: types.FETCH_BOOK,
             payload:response.data

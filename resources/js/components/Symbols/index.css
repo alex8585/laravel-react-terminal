@@ -1,8 +1,14 @@
 
-.asks-table tbody{
+.price.raise{
+    color:green;
+    
+}
+
+.price.decline{
     color:red;
 }
 
-.bids-table tbody{
-    color:green;
+.symbols-table tr {
+    cursor:pointer;
 }
+

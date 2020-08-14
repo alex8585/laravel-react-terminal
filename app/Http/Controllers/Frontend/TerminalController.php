@@ -24,8 +24,9 @@ class TerminalController extends Controller
        return view('terminal.index', []);
     }
 
-    public function getBookOrder() {
-        $orders = OrderBook::get()->toArray();
+    public function getBookOrder(Request $request) {
+        $sumbol = $request->sumbol ? $request->sumbol : 'ETHUSDT';
+        $orders = OrderBook::where(['symbol'=>$sumbol])->get()->toArray();
         return response()->json($orders);
     }
 
@@ -35,7 +36,7 @@ class TerminalController extends Controller
         $data = json_decode($statistic['data']);
         
         $price = Price::latest('updated_at')->where(["symbol" => $sumbol])->first();
-        //dd($data);
+        
         $data->lastPrice =  $price->price;
         return response()->json($data);
     }

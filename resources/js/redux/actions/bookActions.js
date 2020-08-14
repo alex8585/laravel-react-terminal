@@ -1,9 +1,10 @@
 import * as types from '../types';
 
 
-export function fetchBook() {
+export function fetchBook(currentSymbol) {
     return {
-        type: types.REQUEST_BOOK
+        type: types.REQUEST_BOOK,
+        payload:currentSymbol
     }
 
 }

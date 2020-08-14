@@ -42,51 +42,72 @@ class GetOrderBook extends Command
      */
     public function handle() 
     { 
-
-        $params = [
-            'symbol'=> 'ETHUSDT',
-            'limit' => 5
-        ];
-
-        $response = $this->binRequest->get('depth', $params);
         
-        OrderBook::where([
-            'exchanger' => 'binance',
-            'currency' => 'ETH',
-        ])->delete();
+        $sumbols =  config('settings.sumbols');
 
+        foreach( $sumbols as $sumbol) {
 
-        $now = Carbon::now();
+            $params = [
+                'symbol'=> $sumbol,
+                'limit' => 5
+            ];
 
-        $insertArrData = [];
+            $response = $this->binRequest->get('depth', $params);
 
-        foreach($response->bids as $bid) {
-            $newElem = [];
-            $newElem['currency'] = 'ETH';
-            $newElem['exchanger'] = 'binance';
-            $newElem['type'] = 'bid';
-            $newElem['price'] = $bid[0];
-            $newElem['qty'] = $bid[1];
-            $newElem['created_at'] = $now;
-            $newElem['updated_at'] = $now; 
-            $insertArrData[] = $newElem;
+           // dd($response); die;
+
+            OrderBook::where([
+                'exchanger' => 'binance',
+                'symbol' => $sumbol,
+            ])->delete();
+    
+    
+            $now = Carbon::now();
+    
+            $insertArrData = [];
+    
+            foreach($response->bids as $bid) {
+                $newElem = [];
+                //$newElem['currency'] = $sumbol;
+                $newElem['symbol'] = $sumbol;
+                $newElem['exchanger'] = 'binance';
+                $newElem['type'] = 'bid';
+                $newElem['price'] = $bid[0];
+                $newElem['qty'] = $bid[1];
+                $newElem['created_at'] = $now;
+                $newElem['updated_at'] = $now; 
+                $insertArrData[] = $newElem;
+            }
+    
+            foreach($response->asks as $ask) {
+                $newElem = [];
+                //$newElem['currency'] = $sumbol;
+                $newElem['symbol'] = $sumbol;
+                $newElem['exchanger'] = 'binance';
+                $newElem['type'] = 'ask';
+                $newElem['price'] = $ask[0];
+                $newElem['qty'] = $ask[1];
+                $newElem['created_at'] = $now;
+                $newElem['updated_at'] = $now; 
+                $insertArrData[] = $newElem;
+            }
+    
+    
+    
+            OrderBook::insert($insertArrData);
+            sleep(1);
         }
+        
 
-        foreach($response->asks as $ask) {
-            $newElem = [];
-            $newElem['currency'] = 'ETH';
-            $newElem['exchanger'] = 'binance';
-            $newElem['type'] = 'ask';
-            $newElem['price'] = $ask[0];
-            $newElem['qty'] = $ask[1];
-            $newElem['created_at'] = $now;
-            $newElem['updated_at'] = $now; 
-            $insertArrData[] = $newElem;
-        }
+        
+        
+
+       
 
 
 
-        OrderBook::insert($insertArrData);
+
+       
 
         //print_r($insertArrData);
     }

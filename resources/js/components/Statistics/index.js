@@ -11,18 +11,20 @@ export default () => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.stats.loading);
     const stat = useSelector(state => state.stats.statisticArr);
+    const currentSymbol = useSelector(state => state.terminal.currentSymbol);
 
-
+    
+    
     useEffect(() => {
-        dispatch(statistics.fetchStatistics('ETHUSDT'));
+        dispatch(statistics.fetchStatistics(currentSymbol));
         console.log('useEffect Statistics');
         const interval = setInterval(() => {
-            dispatch(statistics.fetchStatistics('ETHUSDT'));
+            dispatch(statistics.fetchStatistics(currentSymbol));
             console.log('useEffect Statistics');
         }, 60000);
         return () => clearInterval(interval);
 
-    },[]); 
+    },[currentSymbol]); 
     
     
     
@@ -52,7 +54,7 @@ export default () => {
         <table className="table statistics">
             <thead>
                 <tr>
-                    <th> ETH/USDT</th>
+                    <th> {currentSymbol}</th>
                     <th> 24h Change</th>
                     <th> 24h High</th>
                     <th> 24h Low</th>

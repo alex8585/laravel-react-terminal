@@ -3,6 +3,7 @@ import * as types from "../types";
 const initialState = {
     symbolsArr: [],
     loading: true
+    
 }
 
 export const symbolseReduser = (state = initialState, action) => {
@@ -13,6 +14,8 @@ export const symbolseReduser = (state = initialState, action) => {
             return {...state, loading:false}
         case types.FETCH_SYMBOLS:
             return {...state, symbolsArr: action.payload }
+      
+
         default: return state;
     }
     

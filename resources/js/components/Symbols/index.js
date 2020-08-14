@@ -2,27 +2,39 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './index.css';
 import BookRow from '../BookRow';
-import {fetchSymbols} from '../../redux/actions/symbolsActions';
+import {fetchSymbols } from '../../redux/actions/symbolsActions';
+import {setCurrentSymbol } from '../../redux/actions/terminalActions';
+
+
+
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react';
 
-export default () => {
+ function Symbols()  {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.symbols.loading);
     const symbolsArr = useSelector(state => state.symbols.symbolsArr);
 
     useEffect(() => {
-        dispatch(fetchSymbols());
-        console.log('useEffect SYMBOLS');
-        const interval = setInterval(() => {
-            dispatch(fetchSymbols());
-            console.log('useEffect SYMBOLS');
+        console.log('useEffect SYMBOLS1');
+        dispatch(fetchSymbols(symbolsArr));
+        console.log(symbolsArr);
+    },[])
+    
+    useEffect(() => {
+        let interval = setTimeout(() => {
+            dispatch(fetchSymbols(symbolsArr));
+            console.log('useEffect SYMBOLS2');
+            console.log(symbolsArr);
         }, 60000);
-        return () => clearInterval(interval);
+        return () => clearTimeout(interval);
+    },[symbolsArr]); 
+    
 
-    },[]); 
-    
-    
+    function sumbolClickHandler(symbol)  {
+        dispatch(setCurrentSymbol(symbol));
+    }
+
 
     if(loading) {
         return(
@@ -31,14 +43,22 @@ export default () => {
             </div>
         )
     } 
-
+   
     let symbols = symbolsArr.map(symbol => {
+       
         let stat = JSON.parse(symbol.data);
         const quoteVolume =  Math.round(+stat.quoteVolume);
+
+        let priceClases = ['price'];
+        if(symbol.direction) {
+            priceClases.push(symbol.direction);
+        }
+       
+
         return (
-            <tr key={symbol.stat_id}>
+            <tr onClick={ () => {sumbolClickHandler(symbol.symbol)} } key={symbol.stat_id}>
                 <td>{symbol.symbol}</td>
-                <td>{(+symbol.price).toFixed(4)}</td>
+                <td className={priceClases.join(' ')} >{(+symbol.price).toFixed(4)}</td>
                 <td>{new Intl.NumberFormat('en-Us', { }).format(quoteVolume)}</td>
             </tr>
         )
@@ -49,10 +69,11 @@ export default () => {
     
 
     return (
+      
         <div className='order-book'>
             <table className="table symbols-table">
             <thead>
-                <tr>
+                <tr >
                 <th scope="col">Pair</th>
                 <th scope="col">Price</th>
                 <th scope="col">Volume</th>
@@ -62,8 +83,8 @@ export default () => {
                    {symbols}
                 </tbody>
             </table>
-
-            
         </div>
     )
 }
+
+export default Symbols;

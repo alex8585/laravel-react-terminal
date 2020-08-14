@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('get_price')->cron('* * * * *');
+        $schedule->command('get_price')->cron('*/3 * * * *');
         $schedule->command('get_order_book')->cron('*/5 * * * *');
         $schedule->command('get_statistics')->cron('*/5 * * * *');
     }

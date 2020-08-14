@@ -12793,7 +12793,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.asks-table tbody{\n    color:red;\n}\n\n.bids-table tbody{\n    color:green;\n}", ""]);
+exports.push([module.i, "\n.price.raise{\n    color:green;\n    \n}\n\n.price.decline{\n    color:red;\n}\n\n.symbols-table tr {\n    cursor:pointer;\n}\n\n", ""]);
 
 // exports
 
@@ -92159,17 +92159,20 @@ __webpack_require__.r(__webpack_exports__);
   var book = Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["useSelector"])(function (state) {
     return state.book.bookArr;
   });
+  var currentSymbol = Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["useSelector"])(function (state) {
+    return state.terminal.currentSymbol;
+  });
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    dispatch(Object(_redux_actions_bookActions__WEBPACK_IMPORTED_MODULE_4__["fetchBook"])());
+    dispatch(Object(_redux_actions_bookActions__WEBPACK_IMPORTED_MODULE_4__["fetchBook"])(currentSymbol));
     console.log('useEffect BOOK');
     var interval = setInterval(function () {
-      dispatch(Object(_redux_actions_bookActions__WEBPACK_IMPORTED_MODULE_4__["fetchBook"])());
+      dispatch(Object(_redux_actions_bookActions__WEBPACK_IMPORTED_MODULE_4__["fetchBook"])(currentSymbol));
       console.log('useEffect BOOK');
     }, 60000);
     return function () {
       return clearInterval(interval);
     };
-  }, []);
+  }, [currentSymbol]);
 
   if (loading) {
     return (
@@ -92394,17 +92397,20 @@ __webpack_require__.r(__webpack_exports__);
   var stat = Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["useSelector"])(function (state) {
     return state.stats.statisticArr;
   });
+  var currentSymbol = Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["useSelector"])(function (state) {
+    return state.terminal.currentSymbol;
+  });
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    dispatch(_redux_actions_statisticsActions_js__WEBPACK_IMPORTED_MODULE_3__["fetchStatistics"]('ETHUSDT'));
+    dispatch(_redux_actions_statisticsActions_js__WEBPACK_IMPORTED_MODULE_3__["fetchStatistics"](currentSymbol));
     console.log('useEffect Statistics');
     var interval = setInterval(function () {
-      dispatch(_redux_actions_statisticsActions_js__WEBPACK_IMPORTED_MODULE_3__["fetchStatistics"]('ETHUSDT'));
+      dispatch(_redux_actions_statisticsActions_js__WEBPACK_IMPORTED_MODULE_3__["fetchStatistics"](currentSymbol));
       console.log('useEffect Statistics');
     }, 60000);
     return function () {
       return clearInterval(interval);
     };
-  }, []);
+  }, [currentSymbol]);
 
   if (loading) {
     return (
@@ -92439,7 +92445,7 @@ __webpack_require__.r(__webpack_exports__);
     /*#__PURE__*/
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
     /*#__PURE__*/
-    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " ETH/USDT"),
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " ", currentSymbol),
     /*#__PURE__*/
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, " 24h Change"),
     /*#__PURE__*/
@@ -92518,7 +92524,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _BookRow__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../BookRow */ "./resources/js/components/BookRow/index.js");
 /* harmony import */ var _redux_actions_symbolsActions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../redux/actions/symbolsActions */ "./resources/js/redux/actions/symbolsActions.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _redux_actions_terminalActions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../redux/actions/terminalActions */ "./resources/js/redux/actions/terminalActions.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
 
 
@@ -92526,25 +92533,35 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function () {
-  var dispatch = Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["useDispatch"])();
-  var loading = Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["useSelector"])(function (state) {
+
+
+function Symbols() {
+  var dispatch = Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["useDispatch"])();
+  var loading = Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["useSelector"])(function (state) {
     return state.symbols.loading;
   });
-  var symbolsArr = Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["useSelector"])(function (state) {
+  var symbolsArr = Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["useSelector"])(function (state) {
     return state.symbols.symbolsArr;
   });
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    dispatch(Object(_redux_actions_symbolsActions__WEBPACK_IMPORTED_MODULE_4__["fetchSymbols"])());
-    console.log('useEffect SYMBOLS');
-    var interval = setInterval(function () {
-      dispatch(Object(_redux_actions_symbolsActions__WEBPACK_IMPORTED_MODULE_4__["fetchSymbols"])());
-      console.log('useEffect SYMBOLS');
+    console.log('useEffect SYMBOLS1');
+    dispatch(Object(_redux_actions_symbolsActions__WEBPACK_IMPORTED_MODULE_4__["fetchSymbols"])(symbolsArr));
+    console.log(symbolsArr);
+  }, []);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    var interval = setTimeout(function () {
+      dispatch(Object(_redux_actions_symbolsActions__WEBPACK_IMPORTED_MODULE_4__["fetchSymbols"])(symbolsArr));
+      console.log('useEffect SYMBOLS2');
+      console.log(symbolsArr);
     }, 60000);
     return function () {
-      return clearInterval(interval);
+      return clearTimeout(interval);
     };
-  }, []);
+  }, [symbolsArr]);
+
+  function sumbolClickHandler(symbol) {
+    dispatch(Object(_redux_actions_terminalActions__WEBPACK_IMPORTED_MODULE_5__["setCurrentSymbol"])(symbol));
+  }
 
   if (loading) {
     return (
@@ -92563,15 +92580,26 @@ __webpack_require__.r(__webpack_exports__);
   var symbols = symbolsArr.map(function (symbol) {
     var stat = JSON.parse(symbol.data);
     var quoteVolume = Math.round(+stat.quoteVolume);
+    var priceClases = ['price'];
+
+    if (symbol.direction) {
+      priceClases.push(symbol.direction);
+    }
+
     return (
       /*#__PURE__*/
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+        onClick: function onClick() {
+          sumbolClickHandler(symbol.symbol);
+        },
         key: symbol.stat_id
       },
       /*#__PURE__*/
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, symbol.symbol),
       /*#__PURE__*/
-      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, (+symbol.price).toFixed(4)),
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+        className: priceClases.join(' ')
+      }, (+symbol.price).toFixed(4)),
       /*#__PURE__*/
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, new Intl.NumberFormat('en-Us', {}).format(quoteVolume)))
     );
@@ -92604,7 +92632,9 @@ __webpack_require__.r(__webpack_exports__);
     /*#__PURE__*/
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, symbols)))
   );
-});
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Symbols);
 
 /***/ }),
 
@@ -92738,9 +92768,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hideBookLoader", function() { return hideBookLoader; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../types */ "./resources/js/redux/types.js");
 
-function fetchBook() {
+function fetchBook(currentSymbol) {
   return {
-    type: _types__WEBPACK_IMPORTED_MODULE_0__["REQUEST_BOOK"]
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["REQUEST_BOOK"],
+    payload: currentSymbol
   };
 }
 function showBookLoader() {
@@ -92803,9 +92834,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hideSymbolsLoader", function() { return hideSymbolsLoader; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../types */ "./resources/js/redux/types.js");
 
-function fetchSymbols() {
+function fetchSymbols(oldSymbolsArr) {
   return {
-    type: _types__WEBPACK_IMPORTED_MODULE_0__["REQUEST_SYMBOLS"]
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["REQUEST_SYMBOLS"],
+    oldSymbolsArr: oldSymbolsArr
   };
 }
 function showSymbolsLoader() {
@@ -92825,13 +92857,14 @@ function hideSymbolsLoader() {
 /*!*******************************************************!*\
   !*** ./resources/js/redux/actions/terminalActions.js ***!
   \*******************************************************/
-/*! exports provided: showAlert, hideAlert */
+/*! exports provided: showAlert, hideAlert, setCurrentSymbol */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showAlert", function() { return showAlert; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hideAlert", function() { return hideAlert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setCurrentSymbol", function() { return setCurrentSymbol; });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../types */ "./resources/js/redux/types.js");
 
 function showAlert(text) {
@@ -92849,6 +92882,12 @@ function showAlert(text) {
 function hideAlert() {
   return {
     type: _types__WEBPACK_IMPORTED_MODULE_0__["HIDE_ALERT"]
+  };
+}
+function setCurrentSymbol(symbol) {
+  return {
+    type: _types__WEBPACK_IMPORTED_MODULE_0__["SET_SYMBOL"],
+    payload: symbol
   };
 }
 
@@ -93077,7 +93116,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 var initialState = {
-  alert: null
+  alert: null,
+  currentSymbol: 'BTCUSDT'
 };
 var terminalReducer = function terminalReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
@@ -93092,6 +93132,11 @@ var terminalReducer = function terminalReducer() {
     case _types__WEBPACK_IMPORTED_MODULE_0__["HIDE_ALERT"]:
       return _objectSpread({}, state, {
         alert: null
+      });
+
+    case _types__WEBPACK_IMPORTED_MODULE_0__["SET_SYMBOL"]:
+      return _objectSpread({}, state, {
+        currentSymbol: action.payload
       });
 
     default:
@@ -93165,7 +93210,7 @@ function sagaWatcher() {
 }
 
 function sagaGetSymbols(params) {
-  var response;
+  var response, oldSymbolsArr, newSymbolsArr;
   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function sagaGetSymbols$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -93180,37 +93225,61 @@ function sagaGetSymbols(params) {
 
         case 5:
           response = _context2.sent;
-          _context2.next = 8;
+          oldSymbolsArr = params.oldSymbolsArr; //console.log(oldSymbolsArr);
+
+          newSymbolsArr = response.data;
+
+          if (oldSymbolsArr.length) {
+            newSymbolsArr = response.data.map(function (elem, index) {
+              var newElemSumblol = elem.symbol;
+              var oldElem = oldSymbolsArr.find(function (oldElem, index) {
+                if (oldElem.symbol == newElemSumblol) return true;
+              });
+              elem.direction = 'none';
+
+              if (oldElem.price > elem.price) {
+                elem.direction = 'raise';
+              } else if (oldElem.price < elem.price) {
+                elem.direction = 'decline';
+              } else if (oldElem.price == elem.price) {
+                elem.direction = oldElem.direction;
+              }
+
+              return elem;
+            });
+          }
+
+          _context2.next = 11;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])({
             type: _types__WEBPACK_IMPORTED_MODULE_2__["FETCH_SYMBOLS"],
-            payload: response.data
+            payload: newSymbolsArr
           });
 
-        case 8:
-          _context2.next = 10;
+        case 11:
+          _context2.next = 13;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_symbolsActions__WEBPACK_IMPORTED_MODULE_6__["hideSymbolsLoader"])());
 
-        case 10:
-          _context2.next = 19;
+        case 13:
+          _context2.next = 22;
           break;
 
-        case 12:
-          _context2.prev = 12;
+        case 15:
+          _context2.prev = 15;
           _context2.t0 = _context2["catch"](0);
           console.log(_context2.t0);
-          _context2.next = 17;
+          _context2.next = 20;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_terminalActions__WEBPACK_IMPORTED_MODULE_3__["showAlert"])(_context2.t0.toString() + ' "getsymbols"'));
 
-        case 17:
-          _context2.next = 19;
+        case 20:
+          _context2.next = 22;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_symbolsActions__WEBPACK_IMPORTED_MODULE_6__["hideSymbolsLoader"])());
 
-        case 19:
+        case 22:
         case "end":
           return _context2.stop();
       }
     }
-  }, _marked2, null, [[0, 12]]);
+  }, _marked2, null, [[0, 15]]);
 }
 
 function sagaGetStatistics(params) {
@@ -93267,53 +93336,58 @@ function sagaGetStatistics(params) {
   }, _marked3, null, [[1, 13]]);
 }
 
-function sagaGetbook() {
-  var response;
+function sagaGetbook(params) {
+  var sumbol, response;
   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function sagaGetbook$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
         case 0:
           _context4.prev = 0;
-          _context4.next = 3;
+          sumbol = params.payload;
+          _context4.next = 4;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_bookActions__WEBPACK_IMPORTED_MODULE_4__["showBookLoader"])());
 
-        case 3:
-          _context4.next = 5;
-          return axios.get('/getbook');
+        case 4:
+          _context4.next = 6;
+          return axios.get('/getbook', {
+            params: {
+              sumbol: sumbol
+            }
+          });
 
-        case 5:
+        case 6:
           response = _context4.sent;
-          _context4.next = 8;
+          _context4.next = 9;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])({
             type: _types__WEBPACK_IMPORTED_MODULE_2__["FETCH_BOOK"],
             payload: response.data
           });
 
-        case 8:
-          _context4.next = 10;
+        case 9:
+          _context4.next = 11;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_bookActions__WEBPACK_IMPORTED_MODULE_4__["hideBookLoader"])());
 
-        case 10:
-          _context4.next = 19;
+        case 11:
+          _context4.next = 20;
           break;
 
-        case 12:
-          _context4.prev = 12;
+        case 13:
+          _context4.prev = 13;
           _context4.t0 = _context4["catch"](0);
           console.log(_context4.t0);
-          _context4.next = 17;
+          _context4.next = 18;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_terminalActions__WEBPACK_IMPORTED_MODULE_3__["showAlert"])(_context4.t0.toString() + ' "getbook"'));
 
-        case 17:
-          _context4.next = 19;
+        case 18:
+          _context4.next = 20;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_bookActions__WEBPACK_IMPORTED_MODULE_4__["hideBookLoader"])());
 
-        case 19:
+        case 20:
         case "end":
           return _context4.stop();
       }
     }
-  }, _marked4, null, [[0, 12]]);
+  }, _marked4, null, [[0, 13]]);
 }
 
 /***/ }),
@@ -93322,13 +93396,14 @@ function sagaGetbook() {
 /*!*************************************!*\
   !*** ./resources/js/redux/types.js ***!
   \*************************************/
-/*! exports provided: SHOW_ALERT, HIDE_ALERT, REQUEST_BOOK, FETCH_BOOK, SHOW_BOOK_LOADER, HIDE_BOOK_LOADER, FETCH_STATISTIC, REQUEST_STATISTIC, HIDE_STATS_LOADER, SHOW_STATS_LOADER, FETCH_SYMBOLS, REQUEST_SYMBOLS, HIDE_SYMBOLS_LOADER, SHOW_SYMBOLS_LOADER */
+/*! exports provided: SHOW_ALERT, HIDE_ALERT, SET_SYMBOL, REQUEST_BOOK, FETCH_BOOK, SHOW_BOOK_LOADER, HIDE_BOOK_LOADER, FETCH_STATISTIC, REQUEST_STATISTIC, HIDE_STATS_LOADER, SHOW_STATS_LOADER, FETCH_SYMBOLS, REQUEST_SYMBOLS, HIDE_SYMBOLS_LOADER, SHOW_SYMBOLS_LOADER */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOW_ALERT", function() { return SHOW_ALERT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HIDE_ALERT", function() { return HIDE_ALERT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_SYMBOL", function() { return SET_SYMBOL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REQUEST_BOOK", function() { return REQUEST_BOOK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_BOOK", function() { return FETCH_BOOK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOW_BOOK_LOADER", function() { return SHOW_BOOK_LOADER; });
@@ -93341,8 +93416,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REQUEST_SYMBOLS", function() { return REQUEST_SYMBOLS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HIDE_SYMBOLS_LOADER", function() { return HIDE_SYMBOLS_LOADER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOW_SYMBOLS_LOADER", function() { return SHOW_SYMBOLS_LOADER; });
+//TERMINAL
 var SHOW_ALERT = 'TERMINAL/SHOW_ALERT';
-var HIDE_ALERT = 'TERMINAL/HIDE_ALERT'; //BOOK
+var HIDE_ALERT = 'TERMINAL/HIDE_ALERT';
+var SET_SYMBOL = 'TERMINAL/SET_SYMBOL'; //BOOK
 
 var REQUEST_BOOK = 'BOOK/REQUEST_BOOK';
 var FETCH_BOOK = 'BOOK/FETCH_BOOK';

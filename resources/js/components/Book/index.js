@@ -10,17 +10,18 @@ export default () => {
     const dispatch = useDispatch();
     const loading = useSelector(state => state.book.loading);
     const book = useSelector(state => state.book.bookArr);
+    const currentSymbol = useSelector(state => state.terminal.currentSymbol);
 
     useEffect(() => {
-        dispatch(fetchBook());
+        dispatch(fetchBook(currentSymbol));
         console.log('useEffect BOOK');
         const interval = setInterval(() => {
-            dispatch(fetchBook());
+            dispatch(fetchBook(currentSymbol));
             console.log('useEffect BOOK');
         }, 60000);
         return () => clearInterval(interval);
 
-    },[]); 
+    },[currentSymbol]); 
     
     
 
