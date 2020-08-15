@@ -17,10 +17,10 @@ export default () => {
     
     useEffect(() => {
         dispatch(statistics.fetchStatistics(currentSymbol));
-        console.log('useEffect Statistics');
+        console.log('useEffect Statistics1');
         const interval = setInterval(() => {
             dispatch(statistics.fetchStatistics(currentSymbol));
-            console.log('useEffect Statistics');
+            console.log('useEffect Statistics2');
         }, 60000);
         return () => clearInterval(interval);
 

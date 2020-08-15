@@ -21,7 +21,7 @@ Route::namespace('Frontend')->group(function () {
     Route::get('/getbook', 'TerminalController@getBookOrder');
     Route::get('/getstatistics', 'TerminalController@getStatistics');
     Route::get('/getsymbols', 'TerminalController@getSymbols');
-
+    Route::get('/chart', 'TerminalController@getChartData');
 
    /* Route::get('/currencies', 'CurrencyController@currencies')->name('front_currencies');
 

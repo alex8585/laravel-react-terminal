@@ -51,4 +51,57 @@ class TerminalController extends Controller
         return response()->json($data);
     }
 
+    public function getChartData(Request $request) {
+        $sumbol = $request->sumbol ? $request->sumbol : 'ETHUSDT';//480
+        $data = Price::where(['symbol'=>$sumbol])->latest('updated_at')->limit(480)
+            ->orderBy('updated_at')->get()->reverse()->toArray();
+       
+        $newCandels = [];
+        $candles = array_chunk($data, 5);
+        //dd( $candles );
+        foreach($candles as $candle) {
+            $newCandl =[];
+            $start = array_reduce($candle, function($carry, $elem) {
+                if(!isset( $carry['created_at']) ) {
+                    return $elem;
+                }
+                if(strtotime($elem['created_at']) > strtotime($carry['created_at'])) {
+                    return $carry;
+                } 
+                return $elem;
+            });
+
+            $end = array_reduce($candle, function($carry, $elem) {
+                if(!isset( $carry['created_at']) ) {
+                    return $elem;
+                }
+                if(strtotime($elem['created_at']) > strtotime($carry['created_at'])) {
+                    return $elem;
+                } 
+                return $carry;
+            });
+
+            $timestamp = strtotime($start['created_at']);
+            $time = date('H:i', $timestamp);
+            $newCandl[] = $time;
+            
+            $newCandl[] = max(array_column($candle, 'price'));
+            $newCandl[] = $start['price'];
+            $newCandl[] = $end['price'];
+            $newCandl[] = min(array_column($candle, 'price'));
+            
+            $newCandels[] = $newCandl;
+        }
+
+        //dd(  $newCandels);
+        return response()->json($newCandels);
+    }
+
+    private function max($candle, $item)
+    {
+        
+        return $candle;
+    }
+
+
 }

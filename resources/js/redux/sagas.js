@@ -5,12 +5,35 @@ import { showAlert } from './actions/terminalActions';
 import { showBookLoader,hideBookLoader } from './actions/bookActions';
 import { statShowLoader,statsHideLoader } from './actions/statisticsActions';
 import { showSymbolsLoader,hideSymbolsLoader } from './actions/symbolsActions';
+import { chartShowLoader,chartHideLoader } from './actions/candlestickChartActions';
 
 export function* sagaWatcher() {
     yield takeEvery(types.REQUEST_BOOK, sagaGetbook);
     yield takeEvery(types.REQUEST_STATISTIC, sagaGetStatistics);
     yield takeEvery(types.REQUEST_SYMBOLS, sagaGetSymbols);
+    yield takeEvery(types.REQUEST_CHART, sagaGetChart);
 }
+
+
+function* sagaGetChart(params) {
+    let sumbol = params.payload;
+    try {
+        yield put(chartShowLoader());
+        const response = yield axios.get('/chart',{
+            params: {sumbol} 
+        });
+        yield put({
+            type: types.FETCH_CHART,
+            payload:response.data
+        })
+        yield put(chartHideLoader());
+    } catch(e) {
+        console.log(e);
+        yield put(showAlert(e.toString() + ' "chart"'));
+        yield put(chartHideLoader());
+    }
+}
+
 
 function*  sagaGetSymbols(params) {
     try {

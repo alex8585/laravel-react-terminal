@@ -2,6 +2,9 @@ import React from 'react';
 import { Alert } from 'react-bootstrap';
 
 
+
+import CandlestickChart from '../CandlestickChart';
+
 import Book from '../Book';
 import styles from './index.css';
 import Statistics from '../Statistics';
@@ -28,6 +31,7 @@ export default () => {
                 </div>
                 <div className='col-md-6'>
                     <Statistics />
+                   <CandlestickChart />
                 </div>
                 <div className='col-md-3'>
                     <Symbols />
