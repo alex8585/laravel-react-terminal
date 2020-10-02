@@ -3,37 +3,32 @@ import PropTypes from 'prop-types';
 import styles from './index.css';
 import BookRow from '../BookRow';
 import {fetchBook} from '../../redux/actions/bookActions';
-import {useDispatch, useSelector} from 'react-redux';
-import {useEffect, useState} from 'react';
+import {connect} from 'react-redux';
+import {useEffect} from 'react';
+import  Spinner from '../Common/Spinner';
 
-export default () => {
-    const dispatch = useDispatch();
-    const loading = useSelector(state => state.book.loading);
-    const book = useSelector(state => state.book.bookArr);
-    const currentSymbol = useSelector(state => state.terminal.currentSymbol);
-
+const Book  =  ({loading, book, currentSymbol, fetchBook}) => {
+ 
     useEffect(() => {
-        dispatch(fetchBook(currentSymbol));
-        console.log('useEffect BOOK');
+        fetchBook(currentSymbol);
+        console.log('useEffect BOOK 1');
+
         const interval = setInterval(() => {
-            dispatch(fetchBook(currentSymbol));
-            console.log('useEffect BOOK');
-        }, 60000);
+            fetchBook(currentSymbol);
+            console.log('useEffect BOOK 2');
+        },60000);
+
         return () => clearInterval(interval);
 
     },[currentSymbol]); 
     
     
-
     if(loading) {
-        return(
-            <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-            </div>
-        )
-    } 
-
+        return  (<Spinner></Spinner>)
+	} 
     
+  
+
     let bids = book.filter(row =>  row.type == 'bid' )
     bids = bids.sort((a, b) => (a.price > b.price) ? -1 : 1)
     bids = bids.map(row => <BookRow row={row} key={row.id}></BookRow>);
@@ -75,3 +70,25 @@ export default () => {
         </div>
     )
 }
+
+const mapStateToProps = (state) => {
+    return {
+        loading: state.book.loading,
+        book: state.book.bookArr,
+        currentSymbol: state.terminal.currentSymbol,
+    }
+}
+
+const actions = {
+    fetchBook
+}
+
+// const mapDispatchToProps = (state) => {
+//     return {
+      
+//     }
+// }
+
+
+
+export default connect(mapStateToProps, actions)(Book);

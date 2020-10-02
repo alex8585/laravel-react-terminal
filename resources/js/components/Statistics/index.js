@@ -2,24 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './index.css';
 
-import * as statistics from '../../redux/actions/statisticsActions.js';
+import { fetchStatistics } from '../../redux/actions/statisticsActions.js';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react';
+import  Spinner from '../Common/Spinner';
+import {connect} from 'react-redux';
 
-
-export default () => {
-    const dispatch = useDispatch();
-    const loading = useSelector(state => state.stats.loading);
-    const stat = useSelector(state => state.stats.statisticArr);
-    const currentSymbol = useSelector(state => state.terminal.currentSymbol);
-
-    
+const Statistics = ({fetchStatistics, loading, stat, currentSymbol }) => {
     
     useEffect(() => {
-        dispatch(statistics.fetchStatistics(currentSymbol));
+       fetchStatistics(currentSymbol);
         console.log('useEffect Statistics1');
         const interval = setInterval(() => {
-            dispatch(statistics.fetchStatistics(currentSymbol));
+            fetchStatistics(currentSymbol);
             console.log('useEffect Statistics2');
         }, 60000);
         return () => clearInterval(interval);
@@ -29,13 +24,9 @@ export default () => {
     
     
     if(loading) {
-        return(
-            <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-            </div>
-        )
-    } 
-    //console.log(stat);
+        return  (<Spinner></Spinner>)
+	} 
+    
 
     const priceChange = +stat.priceChange;
     const priceChangePercent = +stat.priceChangePercent;
@@ -78,3 +69,17 @@ export default () => {
         
     )
 }
+
+const mapStateToProps = (state) => {
+    return {
+        loading:state.stats.loading,
+        stat: state.stats.statisticArr,
+        currentSymbol: state.terminal.currentSymbol,
+    }
+}
+
+const actions = {
+    fetchStatistics
+}
+
+export default connect(mapStateToProps, actions)(Statistics);

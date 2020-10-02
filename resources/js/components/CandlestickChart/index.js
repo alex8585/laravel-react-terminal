@@ -1,43 +1,40 @@
 import React from 'react';
 import { Chart } from "react-google-charts";
-import {useDispatch, useSelector} from 'react-redux';
-import {useEffect, useState} from 'react';
+import {connect} from 'react-redux';
+import {useEffect} from 'react';
 
-import * as chart from '../../redux/actions/candlestickChartActions.js';
+import * as actions from '../../redux/actions/candlestickChartActions.js';
+import  config from '../../config.js';
+import  Spinner from '../Common/Spinner';
 
-export default () => { 
 
-	const dispatch = useDispatch();
-    const loading = useSelector(state => state.chart.loading);
-	const chardData = useSelector(state => state.chart.data);
-	const currentSymbol = useSelector(state => state.terminal.currentSymbol);
+var CandlestickChart  = ({loading, chardData, currentSymbol, fetchChart}) => { 
+	let refresh_rate = config('chart.refresh_rate');
 
-	useEffect(() => {
-        console.log('useEffect fetchChart1');
-        dispatch(chart.fetchChart(currentSymbol));
-    },[currentSymbol])
-    
     useEffect(() => {
-        let interval = setTimeout(() => {
-            dispatch(chart.fetchChart(currentSymbol));
+		fetchChart(currentSymbol);
+		console.log('useEffect fetchChart1');
+        let interval = setInterval(() => {
+            fetchChart(currentSymbol);
             console.log('useEffect fetchChart2');
-        }, 60000);
-        return () => clearTimeout(interval);
-	},[chardData]); 
+        }, refresh_rate);
+        return () => clearInterval(interval);
+	},[currentSymbol]); 
 	
     
 	
 	if(loading) {
-        return(
-            <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-            </div>
-        )
+        return (<Spinner></Spinner>)
 	} 
 	
+	
+
+
+
 	if(!chardData.length) return null;
 
 	return ( <div style={{ display: 'flex', maxWidth: 900 }}>
+		
 		<Chart
 			width={'100%'}
 			height={350}
@@ -61,3 +58,15 @@ export default () => {
 		/>
 	</div> )
 }
+
+const mapStateToProps = (state) => {
+    return {
+    	loading: state.chart.loading,
+		chardData: state.chart.data,
+		currentSymbol: state.terminal.currentSymbol,
+    }
+}
+
+
+
+export default connect(mapStateToProps, actions)(CandlestickChart);

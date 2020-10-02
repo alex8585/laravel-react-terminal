@@ -4,48 +4,38 @@ import styles from './index.css';
 import BookRow from '../BookRow';
 import {fetchSymbols } from '../../redux/actions/symbolsActions';
 import {setCurrentSymbol } from '../../redux/actions/terminalActions';
+import  Spinner from '../Common/Spinner';
 
 
+import {connect} from 'react-redux';
+import {useEffect} from 'react';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {useEffect, useState} from 'react';
-
- function Symbols()  {
-    const dispatch = useDispatch();
-    const loading = useSelector(state => state.symbols.loading);
-    const symbolsArr = useSelector(state => state.symbols.symbolsArr);
+function Symbols({setCurrentSymbol, fetchSymbols, loading, symbolsArr})  {
 
     useEffect(() => {
-        console.log('useEffect SYMBOLS1');
-        dispatch(fetchSymbols(symbolsArr));
-        console.log(symbolsArr);
-    },[])
-    
-    useEffect(() => {
-        let interval = setTimeout(() => {
-            dispatch(fetchSymbols(symbolsArr));
-            console.log('useEffect SYMBOLS2');
-            console.log(symbolsArr);
-        }, 60000);
+
+        if(symbolsArr.length == 0) {
+            console.log('useEffect SYMBOLS 1');
+            fetchSymbols(symbolsArr);
+        }
+      
+        const interval = setTimeout(() => {
+            console.log('useEffect SYMBOLS 2');
+            //console.log(symbolsArr);
+            fetchSymbols(symbolsArr);
+        },60000);
+
         return () => clearTimeout(interval);
+
     },[symbolsArr]); 
     
 
-    function sumbolClickHandler(symbol)  {
-        dispatch(setCurrentSymbol(symbol));
-    }
-
-
     if(loading) {
-        return(
-            <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-            </div>
-        )
-    } 
-   
+        return  (<Spinner></Spinner>)
+    }  
+    
+
     let symbols = symbolsArr.map(symbol => {
-       
         let stat = JSON.parse(symbol.data);
         const quoteVolume =  Math.round(+stat.quoteVolume);
 
@@ -56,7 +46,7 @@ import {useEffect, useState} from 'react';
        
 
         return (
-            <tr onClick={ () => {sumbolClickHandler(symbol.symbol)} } key={symbol.stat_id}>
+            <tr onClick={ () => {setCurrentSymbol(symbol.symbol)} } key={symbol.stat_id}>
                 <td>{symbol.symbol}</td>
                 <td className={priceClases.join(' ')} >{(+symbol.price).toFixed(4)}</td>
                 <td>{new Intl.NumberFormat('en-Us', { }).format(quoteVolume)}</td>
@@ -66,10 +56,7 @@ import {useEffect, useState} from 'react';
     
     
    
-    
-
     return (
-      
         <div className='order-book'>
             <table className="table symbols-table">
             <thead>
@@ -87,4 +74,16 @@ import {useEffect, useState} from 'react';
     )
 }
 
-export default Symbols;
+const mapStateToProps = (state) => {
+    return {
+        loading: state.symbols.loading,
+        symbolsArr: state.symbols.symbolsArr,
+    }
+}
+
+const actions = {
+    fetchSymbols,
+    setCurrentSymbol
+}
+
+export default connect(mapStateToProps, actions)(Symbols);
