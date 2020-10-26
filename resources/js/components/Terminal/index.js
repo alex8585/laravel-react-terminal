@@ -11,6 +11,8 @@ import Statistics from '../Statistics';
 import Symbols from '../Symbols';
 import {useDispatch, useSelector} from 'react-redux';
 import BuyForm from '../BuyForm';
+import Basic from '../Basic';
+
 export default () => {
     const alert = useSelector(state => state.terminal.alert);
     return (
@@ -44,7 +46,7 @@ export default () => {
                     
                 </div>
                 <div className='col-md-6'>
-                    {/* <BuyForm/> */}
+                     
                     
                 </div>
             </div>

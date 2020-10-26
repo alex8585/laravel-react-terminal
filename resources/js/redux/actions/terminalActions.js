@@ -2,7 +2,7 @@ import * as types from '../types';
 
 export function showAlert(text) {
     return dispatch => {
-        console.log(types.SHOW_ALERT);
+        //console.log(types.SHOW_ALERT);
         dispatch({
             type:types.SHOW_ALERT,
             payload:text
